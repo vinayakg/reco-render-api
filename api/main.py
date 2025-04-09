@@ -10,6 +10,16 @@ from sentence_transformers import SentenceTransformer
 
 app = FastAPI()
 
+# Path to the favicon.ico file
+favicon_path = os.path.join(os.path.dirname(__file__), "static", "favicon.ico")
+
+# Mount the "static" directory
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse(favicon_path)
+
 # --- Load Data on Startup ---
 user_profile_df = pd.read_excel("data/user_profile_data.xlsx")
 model = SentenceTransformer("all-MiniLM-L6-v2")
