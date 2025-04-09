@@ -7,7 +7,9 @@ from collections import defaultdict
 import faiss
 import pickle
 from sentence_transformers import SentenceTransformer
-
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
 app = FastAPI()
 
 # Path to the favicon.ico file
