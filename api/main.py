@@ -7,10 +7,16 @@ from collections import defaultdict
 import faiss
 import pickle
 from sentence_transformers import SentenceTransformer
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+# from fastapi.staticfiles import StaticFiles
+# from fastapi.responses import FileResponse
 import os
 app = FastAPI()
+
+
+async def on_fetch(request, env):
+    import asgi
+
+    return await asgi.fetch(app, request, env)
 
 '''
 # Path to the favicon.ico file

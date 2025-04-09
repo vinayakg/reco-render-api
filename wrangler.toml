@@ -1,0 +1,4 @@
+name = "fastapi-worker"
+main = "api/main.py"
+compatibility_flags = ["python_workers"]
+compatibility_date = "2025-03-16"
