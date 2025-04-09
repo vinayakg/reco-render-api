@@ -11,7 +11,7 @@ from sentence_transformers import SentenceTransformer
 app = FastAPI()
 
 # --- Load Data on Startup ---
-user_profile_df = pd.read_excel("user_profile_data.xlsx")
+user_profile_df = pd.read_excel("data/user_profile_data.xlsx")
 model = SentenceTransformer("all-MiniLM-L6-v2")
 faiss_index = faiss.read_index("db/faiss_index.bin")
 with open("db/faiss_metadata.pkl", "rb") as f:
@@ -27,18 +27,26 @@ for _, row in user_profile_df.iterrows():
         user_tag_profiles[user].extend(row['Tags'].split("|"))
     if pd.notna(row['category']):
         user_category_profiles[user].append(row['category'])
-
+        
+        
 user_profiles_combined = {}
 for user in user_tag_profiles:
     tags = " ".join(set(user_tag_profiles[user]))
     categories = " ".join(set(user_category_profiles[user]))
     user_profiles_combined[user] = f"{tags} {categories}".strip()
 
+
 # --- Pydantic Models ---
 class Details(BaseModel):
+    priceRange : str
+    location: str 
+    rating: str
+    knownFor: str
+    deals: str
     relevance: str
     narrative: str
-
+    offer_title: str
+    
 class Offer(BaseModel):
     id: str
     type: str
@@ -72,8 +80,14 @@ def get_recommendations(
             "description": m["description"],
             "image": m["image"],
             "details": {
+                "priceRange": "",
+                "location": m["city"],
+                "rating": "",
+                "knownFor": "",
+                "deals": "",
                 "relevance": f"Matched for user: '{user_name}'",
-                "narrative": f"Recommended based on preferences or search: '{user_query}'"
+                "narrative": f"Recommended based on preferences or search: '{user_query}'",
+                "offer_title": m["offer_title"]
             },
             "bookmarked": False
         })
