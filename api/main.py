@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Query
 from pydantic import BaseModel
 from typing import List, Optional
+from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 import numpy as np
 from collections import defaultdict
@@ -23,6 +24,13 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 async def favicon():
     return FileResponse(favicon_path)
 '''
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # --- Load Data on Startup ---
 user_profile_df = pd.read_excel("data/user_profile_data.xlsx")
@@ -71,6 +79,10 @@ class Offer(BaseModel):
     bookmarked: bool
 
 # --- API Endpoint ---
+@app.get("/")
+async def main():
+    return {"message": "Hello to the recommdation engine"}
+    
 @app.get("/recommendations", response_model=List[Offer])
 def get_recommendations(
     user_name: str = Query(..., description="User ID"),
