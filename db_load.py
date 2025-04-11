@@ -8,7 +8,7 @@ from sentence_transformers import SentenceTransformer
 model = SentenceTransformer("all-MiniLM-L6-v2")
  
  
-merchant_df = pd.read_csv("merchants.csv")
+merchant_df = pd.read_csv("./data/merchants.csv")
  
  
 # Clean and Prepare Merchant Data
