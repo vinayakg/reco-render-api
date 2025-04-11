@@ -38,10 +38,10 @@ app.add_middleware(
 )
 
 # --- Load Data on Startup ---
-user_profile_df = pd.read_excel("../data/user_profile_data.xlsx")
+user_profile_df = pd.read_excel("data/user_profile_data.xlsx")
 model = SentenceTransformer("all-MiniLM-L6-v2")
-faiss_index = faiss.read_index("../db/faiss_index.bin")
-with open("../db/faiss_metadata.pkl", "rb") as f:
+faiss_index = faiss.read_index("db/faiss_index.bin")
+with open("db/faiss_metadata.pkl", "rb") as f:
     metadata = pickle.load(f)
 
 # --- Build User Profiles ---
